@@ -1,0 +1,16 @@
+﻿   Qt/MSBuild: 3.3.1.1
+   Qt: 6.9.0
+  TestJeuxEchecs.cpp
+  bibliotheque_cours.cpp
+  verification_allocation.cpp
+  gtest-all.cc
+  ProjetJeuxEchecs.cpp
+  main.cpp
+C:\Users\caleb\Documents\INF1015\ChessBase\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x29 that is illegal in the current source character set (codepage 65001).
+C:\Users\caleb\Documents\INF1015\ChessBase\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x72 that is illegal in the current source character set (codepage 65001).
+C:\Users\caleb\Documents\INF1015\ChessBase\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0xe3 that is illegal in the current source character set (codepage 65001).
+C:\Users\caleb\Documents\INF1015\ChessBase\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x152 that is illegal in the current source character set (codepage 65001).
+  qrc_ProjetJeuxEchecs.cpp
+  moc_ProjetJeuxEchecs.cpp
+     Creating library C:\Users\caleb\Documents\INF1015\ChessBase\x64\Debug\ProjetJeuxEchecs.lib and object C:\Users\caleb\Documents\INF1015\ChessBase\x64\Debug\ProjetJeuxEchecs.exp
+  ProjetJeuxEchecs.vcxproj -> C:\Users\caleb\Documents\INF1015\ChessBase\x64\Debug\ProjetJeuxEchecs.exe
