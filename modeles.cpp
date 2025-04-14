@@ -24,15 +24,16 @@ namespace Modeles {
 	};
 
 	class Roi : public Piece {
-		Roi(int x, int y) : Piece(x, y) {};
+	// j'ai modifier le void deplacer
+	public:
+		Roi(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
 		void deplacer(int x, int y) override{
-			if (x > 0 && x < 8 && y>0 && y < 8 && 
-				~x<x_ - 1 && ~x>x_ + 1 && ~y<y_ - 1 && ~y>y_ + 1) {
+			if ((abs(x_ - x) <= 1) && (abs(y_ - y) <= 1) && x >= 0 && x < 8 && y >= 0 && y < 8) {
 				x_ = x;
 				y_ = y;
 			}
 		}
-
+		
 		void manger(const Piece& piece) override{
 			if (piece.couleur_ != this->couleur_) {
 				this->x_ = piece.x_;
@@ -42,18 +43,27 @@ namespace Modeles {
 	};
 
 	class Pion : public Piece {
-		Pion(int x, int y) : Piece(x, y) {};
+	public:
+		Pion(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
 
 		void deplacer(int x, int y) override{
-			if (x > 0 && x < 8 && y>0 && y < 8 &&
-				~x<x_ - 1 && ~x>x_ + 1 && ~y>y_ + 1) {
+			if (couleur_ == blanc && x == x_ && y == y_ + 1 && y < 8) {
+				x_ = x;
+				y_ = y;
+			}
+			else if (couleur_ == noir && x == x_ && y == y_ - 1 && y >= 0) {
 				x_ = x;
 				y_ = y;
 			}
 		};
 
+		// Pour que le pion mange en diagonale
 		void manger(const Piece& piece) override {
-			if (piece.couleur_ != this->couleur_) {
+			if (couleur_ == blanc && piece.couleur_ != couleur_ && abs(x_ - piece.x_) == 1 && y_ + 1 == piece.y_) {
+				this->x_ = piece.x_;
+				this->y_ = piece.y_;
+			}
+			else if (couleur_ == noir && piece.couleur_ != couleur_ && abs(x_ - piece.x_) == 1 && y_ - 1 == piece.y_) {
 				this->x_ = piece.x_;
 				this->y_ = piece.y_;
 			}
@@ -61,21 +71,22 @@ namespace Modeles {
 	};
 
 	class Fou : public Piece {
-		Fou(int x, int y) : Piece(x, y) {};
+	public:
+		Fou(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
 
 		void deplacer(int x, int y) override {
-			if (x > 0 && x < 8 && y>0 && y < 8 &&
-				~x<x_ - 1 && ~x>x_ + 1 && ~y>y_ + 1) {
+			if (abs(x - x_) == abs(y - y_) && x >= 0 && x < 8 && y >= 0 && y < 8) {
 				x_ = x;
 				y_ = y;
 			}
 		};
 
 		void manger(const Piece& piece) override {
-			if (piece.couleur_ != this->couleur_) {
+			if (piece.couleur_ != this->couleur_ && abs(x_ - piece.x_) == abs(y_ - piece.y_)) {
 				this->x_ = piece.x_;
 				this->y_ = piece.y_;
 			}
 		}
 	};
 }
+
