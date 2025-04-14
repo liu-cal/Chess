@@ -4,6 +4,7 @@
 #include "ui_ProjetJeuxEchecs.h"
 #include <vector>        
 #include <QPushButton>
+#include "modeles.hpp"
 
 using namespace std;
 
@@ -23,6 +24,9 @@ private:
 	Ui::ProjetJeuxEchecsClass* ui;
 
 	vector<QPushButton*> cases_;
+	vector<unique_ptr<Modeles::Piece>> pieces_;
+
 	void initialiserEchiquier();
 	void on_ajouter_clicked();
+	bool hasTwoDifferentColorPieces(const QString& pieceType) const;
 };

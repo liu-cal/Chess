@@ -20,13 +20,12 @@ namespace Modeles {
 		virtual ~Piece() = default;
 
 		int x_, y_;
-		static int nbPieces_;
 		Couleur couleur_;
 	};
 
 	class Roi : public Piece {
 	public:
-		Roi(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
+		Roi(int x, int y, Couleur couleur) : Piece(x, y, couleur) { ++nbPieces_; };
 		void deplacer(int x, int y) override {
 			if ((abs(x_ - x) <= 1) && (abs(y_ - y) <= 1) && x >= 0 && x < 8 && y >= 0 && y < 8) {
 				x_ = x;
@@ -40,6 +39,12 @@ namespace Modeles {
 				this->y_ = piece.y_;
 			}
 		}
+
+		~Roi() {
+			--nbPieces_;
+		}
+
+		static int nbPieces_;
 	};
 
 	class Pion : public Piece {

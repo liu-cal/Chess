@@ -58,5 +58,8 @@
     <ClCompile Include="modeles.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="modeles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

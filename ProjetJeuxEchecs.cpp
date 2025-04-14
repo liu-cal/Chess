@@ -1,5 +1,7 @@
 ﻿#include "ProjetJeuxEchecs.h"
 #include "modeles.hpp"
+#include <QMessageBox>
+#include <utility> 
 
 using namespace std;
 
@@ -52,6 +54,11 @@ void ProjetJeuxEchecs::on_ajouter_clicked() {
 		return;
 	}
 
+	if (typePiece == "Roi" && Modeles::Roi::nbPieces_ == 2) {
+		QMessageBox::warning(this, "Erreur", "Il y a déjà deux rois sur l'échiquier.");
+		return;
+	}
+
 	QPushButton* caseBouton = findChild<QPushButton*>(position);
 	if (!caseBouton) {
 		qWarning() << "Bouton non trouvé pour la position:" << position;
@@ -81,7 +88,7 @@ void ProjetJeuxEchecs::on_ajouter_clicked() {
 		caseBouton->setText(pieceLabel);
 
 		// Optional: store piece in a map or vector if you want to manage it later
-		// pieces_.push_back(piece); // for example
+		pieces_.push_back(std::move(piece)); // for example
 	}
 }
 
