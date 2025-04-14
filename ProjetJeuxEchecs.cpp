@@ -63,15 +63,15 @@ void ProjetJeuxEchecs::on_ajouter_clicked() {
 	int x = position[0].toUpper().unicode() - 'A' + 1;
 	int y = position[1].digitValue();
 
-	Modeles::Piece* piece = nullptr;
+	unique_ptr<Modeles::Piece> piece = nullptr;
 	if (typePiece == "Roi") {
-		piece = new Modeles::Roi(x, y, couleurEnum);
+		piece = make_unique<Modeles::Roi>(x, y, couleurEnum);
 	}
 	else if (typePiece == "Pion") {
-		piece = new Modeles::Pion(x, y, couleurEnum);
+		piece = make_unique<Modeles::Pion>(x, y, couleurEnum);
 	}
 	else if (typePiece == "Fou") {
-		piece = new Modeles::Fou(x, y, couleurEnum);
+		piece = make_unique<Modeles::Fou>(x, y, couleurEnum);
 	}
 
 	if (piece) {
