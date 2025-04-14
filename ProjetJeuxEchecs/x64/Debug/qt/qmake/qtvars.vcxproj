@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\caleb\Documents\INF1015\ChessBase\ProjetJeuxEchecs\x64\Debug\qt\qmake;C:\Qt\6.9.0\msvc2022_64\include;C:\Qt\6.9.0\msvc2022_64\include\QtWidgets;C:\Qt\6.9.0\msvc2022_64\include\QtGui;C:\Qt\6.9.0\msvc2022_64\include\QtCore;C:\Users\caleb\Documents\INF1015\ChessBase\ProjetJeuxEchecs\x64\Debug\qt\qmake;/include;C:\Qt\6.9.0\msvc2022_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\ProjetJeuxEchecs\x64\Debug\qt\qmake;C:\Qt\6.9.0\msvc2022_64\include;C:\Qt\6.9.0\msvc2022_64\include\QtWidgets;C:\Qt\6.9.0\msvc2022_64\include\QtGui;C:\Qt\6.9.0\msvc2022_64\include\QtCore;C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\ProjetJeuxEchecs\x64\Debug\qt\qmake;/include;C:\Qt\6.9.0\msvc2022_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>.\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>

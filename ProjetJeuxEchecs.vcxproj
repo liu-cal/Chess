@@ -100,7 +100,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="modeles.cpp" />
+    <ClCompile Include="modeles.hpp" />
     <ClCompile Include="TestJeuxEchecs.cpp" />
     <QtRcc Include="ProjetJeuxEchecs.qrc" />
     <QtUic Include="ProjetJeuxEchecs.ui" />
