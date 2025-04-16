@@ -33,7 +33,24 @@ void ProjetJeuxEchecs::initialiserEchiquier() {
 				cases_.push_back(bouton);
 
 				connect(bouton, &QPushButton::clicked, this, [this, bouton]() {
-					ui->position->setText(bouton->objectName());
+					QString pos = bouton->objectName();
+
+					ui->position->setText(pos);  // Optionally show in GUI
+
+					if (isStarted_) {
+						if (sourceSelection_.isEmpty()) {
+							sourceSelection_ = pos;
+						}
+						else {
+							destinationSelection_ = pos;
+							deplacerPiece(sourceSelection_, destinationSelection_);
+
+							// Reset selections
+							sourceSelection_.clear();
+							destinationSelection_.clear();
+						}
+					}
+
 					});
 			}
 			else {
@@ -49,7 +66,7 @@ void ProjetJeuxEchecs::initialiserEchiquier() {
 
 	mettreAJourStylesHover();
 
-	ui->terminer->setVisible(false);
+	ui->terminer->hide();
 	ui->tourCouleur->setVisible(false);
 }
 
@@ -126,7 +143,7 @@ void ProjetJeuxEchecs::on_enlever_clicked() {
 void ProjetJeuxEchecs::mettreAJourStylesHover() {
 	QString hoverStyle;
 
-	if (!tourBlanc_) {
+	if (tourBlanc_) {
 		hoverStyle = "QPushButton:hover { background-color: lightgreen; }";
 	}
 	else {
@@ -150,7 +167,7 @@ void ProjetJeuxEchecs::mettreAJourStylesHover() {
 }
 
 void ProjetJeuxEchecs::on_start_clicked() {
-	ui->terminer->setVisible(true);
+	ui->terminer->show();
 	ui->tourCouleur->setVisible(true);
 	ui->tourCouleur->setText(tourBlanc_ ? "Tour Blanc" : "Tour Noir");
 	ui->piece->setVisible(false);
@@ -159,6 +176,8 @@ void ProjetJeuxEchecs::on_start_clicked() {
 	ui->ajouter->setVisible(false);
 	ui->enlever->setVisible(false);
 	ui->start->setVisible(false);
+
+	isStarted_ = true;
 }
 
 void ProjetJeuxEchecs::on_terminer_clicked() {
@@ -170,5 +189,87 @@ void ProjetJeuxEchecs::on_terminer_clicked() {
 	ui->ajouter->setVisible(true);
 	ui->enlever->setVisible(true);
 	ui->start->setVisible(true);
+
+	isStarted_ = false;
+}
+
+void ProjetJeuxEchecs::deplacerPiece(const QString& from, const QString& to) {
+	// Convert positions to coordinates
+	int fromX = from[0].toUpper().unicode() - 'A';
+	int fromY = from[1].digitValue() - 1;
+	int toX = to[0].toUpper().unicode() - 'A';
+	int toY = to[1].digitValue() - 1;
+
+	// Check if source position has a piece
+	auto it = pieces_.find(from);
+	if (it == pieces_.end()) {
+		qWarning() << "Aucune pièce à déplacer de la position" << from;
+		return;
+	}
+
+	// Get the piece
+	std::unique_ptr<Modeles::Piece>& piece = it->second;
+
+	// Check if move is valid for this piece type
+	{
+		// Temporary move validation using DeplacementTemporaire
+		try {
+			Modeles::DeplacementTemporaire tempMove(*piece, toX, toY);
+		}
+		catch (...) {
+			QMessageBox::warning(this, "Mouvement invalide",
+				"Ce mouvement n'est pas autorisé pour cette pièce.");
+			return;
+		}
+	}
+
+	// Check if target position has a piece (capture)
+	if (pieces_.contains(to)) {
+		auto& targetPiece = pieces_[to];
+
+		// Check if same color
+		if (targetPiece->couleur_ == piece->couleur_) {
+			QMessageBox::warning(this, "Erreur",
+				"Vous ne pouvez pas capturer une pièce de votre propre couleur.");
+			return;
+		}
+
+		// Validate capture move for this piece type
+		try {
+			piece->manger(*targetPiece);
+		}
+		catch (...) {
+			QMessageBox::warning(this, "Capture invalide",
+				"Cette pièce ne peut pas capturer de cette manière.");
+			return;
+		}
+
+		// Remove captured piece
+		pieces_.erase(to);
+	}
+
+	// Move the piece
+	std::unique_ptr<Modeles::Piece> movedPiece = std::move(it->second);
+	pieces_.erase(it);
+
+	// Update coordinates inside the piece object
+	movedPiece->x_ = toX;
+	movedPiece->y_ = toY;
+
+	// Update UI
+	QPushButton* fromButton = findChild<QPushButton*>(from);
+	QPushButton* toButton = findChild<QPushButton*>(to);
+
+	if (toButton && fromButton) {
+		toButton->setText(fromButton->text());
+		fromButton->setText("");
+	}
+
+	// Store the piece at new location
+	pieces_[to] = std::move(movedPiece);
+
+	// Switch turns
+	tourBlanc_ = (tourBlanc_ == Modeles::blanc) ? Modeles::noir : Modeles::blanc;
+	ui->tourCouleur->setText(tourBlanc_ ? "Tour Blanc" : "Tour Noir");
 }
 

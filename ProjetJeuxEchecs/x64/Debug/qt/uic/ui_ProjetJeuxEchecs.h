@@ -926,7 +926,7 @@ public:
 
         verticalLayoutWidget_2 = new QWidget(centralWidget);
         verticalLayoutWidget_2->setObjectName("verticalLayoutWidget_2");
-        verticalLayoutWidget_2->setGeometry(QRect(470, 230, 102, 51));
+        verticalLayoutWidget_2->setGeometry(QRect(470, 350, 102, 51));
         verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -941,6 +941,12 @@ public:
 
         terminer = new QPushButton(verticalLayoutWidget_2);
         terminer->setObjectName("terminer");
+        terminer->setEnabled(true);
+        QSizePolicy sizePolicy2(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(terminer->sizePolicy().hasHeightForWidth());
+        terminer->setSizePolicy(sizePolicy2);
 
         verticalLayout_2->addWidget(terminer);
 

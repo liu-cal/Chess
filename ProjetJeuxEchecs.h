@@ -27,6 +27,10 @@ private:
 	unordered_map<QString, unique_ptr<Modeles::Piece>> pieces_;
 
 	bool tourBlanc_;
+	bool isStarted_ = false;
+
+	QString sourceSelection_;  // First clicked position
+	QString destinationSelection_;  // Second clicked position
 
 	void initialiserEchiquier();
 	void on_ajouter_clicked();
@@ -35,4 +39,5 @@ private:
 	void mettreAJourStylesHover();
 	void on_start_clicked();
 	void on_terminer_clicked();
+	void deplacerPiece(const QString& from, const QString& to);
 };

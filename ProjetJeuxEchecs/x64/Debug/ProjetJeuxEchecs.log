@@ -1,9 +1,6 @@
 ﻿   Qt/MSBuild: 3.3.1.1
    Qt: 6.9.0
-  uic ProjetJeuxEchecs.ui
   ProjetJeuxEchecs.cpp
-  main.cpp
-  moc_ProjetJeuxEchecs.cpp
-ProjetJeuxEchecs\x64\Debug\modeles.obj : warning LNK4042: object specified more than once; extras ignored
-     Creating library C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\x64\Debug\ProjetJeuxEchecs.lib and object C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\x64\Debug\ProjetJeuxEchecs.exp
+C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\ProjetJeuxEchecs.cpp(199,6): warning C4189: 'fromY': local variable is initialized but not referenced
+C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\ProjetJeuxEchecs.cpp(198,6): warning C4189: 'fromX': local variable is initialized but not referenced
   ProjetJeuxEchecs.vcxproj -> C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\x64\Debug\ProjetJeuxEchecs.exe

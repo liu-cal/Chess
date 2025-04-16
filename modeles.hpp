@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <stdexcept>
 
 using namespace std;
 
@@ -31,6 +32,9 @@ namespace Modeles {
 				x_ = x;
 				y_ = y;
 			}
+			else {
+				throw std::invalid_argument("Mouvement invalide pour un roi");
+			}
 		}
 
 		void manger(const Piece& piece) override {
@@ -60,6 +64,9 @@ namespace Modeles {
 				x_ = x;
 				y_ = y;
 			}
+			else {
+				throw std::invalid_argument("Mouvement invalide pour un roi");
+			}
 		};
 
 		void manger(const Piece& piece) override {
@@ -83,6 +90,9 @@ namespace Modeles {
 				x_ = x;
 				y_ = y;
 			}
+			else {
+				throw std::invalid_argument("Mouvement invalide pour un fou");
+			}
 		};
 
 		void manger(const Piece& piece) override {
@@ -93,11 +103,88 @@ namespace Modeles {
 		}
 	};
 
+	class Tour : public Piece {
+	public:
+		Tour(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
+
+		void deplacer(int x, int y) override {
+			if ((x == x_ || y == y_) && x >= 0 && x < 8 && y >= 0 && y < 8) {
+				x_ = x;
+				y_ = y;
+			}
+			else {
+				throw std::invalid_argument("Mouvement invalide pour un roi");
+			}
+		};
+
+		void manger(const Piece& piece) override {
+			if (piece.couleur_ != this->couleur_ && (x_ == piece.x_ || y_ == piece.y_)) {
+				this->x_ = piece.x_;
+				this->y_ = piece.y_;
+			}
+		}
+	};
+
+	class Cavalier : public Piece {
+	public:
+		Cavalier(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
+
+		void deplacer(int x, int y) override {
+			if (((abs(x - x_) == 2 && abs(y - y_) == 1) ||
+				(abs(x - x_) == 1 && abs(y - y_) == 2)) &&
+				x >= 0 && x < 8 && y >= 0 && y < 8) {
+				x_ = x;
+				y_ = y;
+			}
+			else {
+				throw std::invalid_argument("Mouvement invalide pour un roi");
+			}
+		};
+
+		void manger(const Piece& piece) override {
+			if (piece.couleur_ != this->couleur_ &&
+				((abs(x_ - piece.x_) == 2 && abs(y_ - piece.y_) == 1) ||
+					(abs(x_ - piece.x_) == 1 && abs(y_ - piece.y_) == 2))) {
+				this->x_ = piece.x_;
+				this->y_ = piece.y_;
+			}
+		}
+	};
+
+	class Reine : public Piece {
+	public:
+		Reine(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
+
+		void deplacer(int x, int y) override {
+			if ((x == x_ || y == y_ || abs(x - x_) == abs(y - y_)) &&
+				x >= 0 && x < 8 && y >= 0 && y < 8) {
+				x_ = x;
+				y_ = y;
+			}
+			else {
+				throw std::invalid_argument("Mouvement invalide pour un roi");
+			}
+		};
+
+		void manger(const Piece& piece) override {
+			if (piece.couleur_ != this->couleur_ &&
+				(x_ == piece.x_ || y_ == piece.y_ || abs(x_ - piece.x_) == abs(y_ - piece.y_))) {
+				this->x_ = piece.x_;
+				this->y_ = piece.y_;
+			}
+		}
+	};
+
 	class DeplacementTemporaire {
 	public:
 		DeplacementTemporaire(Piece& piece, int xTemporaire, int yTemporaire)
 			: piece_(piece), xOriginal_(piece.x_), yOriginal_(piece.y_) {
-			piece_.deplacer(xTemporaire, yTemporaire);
+			try {
+				piece_.deplacer(xTemporaire, yTemporaire);
+			}
+			catch (exception e) {
+				throw;
+			}
 		}
 
 		~DeplacementTemporaire() {
@@ -110,4 +197,3 @@ namespace Modeles {
 		int xOriginal_, yOriginal_;
 	};
 }
-
