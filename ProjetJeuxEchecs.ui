@@ -1787,9 +1787,9 @@
     <property name="geometry">
      <rect>
       <x>470</x>
-      <y>190</y>
+      <y>180</y>
       <width>101</width>
-      <height>121</height>
+      <height>161</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -1859,6 +1859,42 @@
       <widget class="QPushButton" name="enlever">
        <property name="text">
         <string>enlever</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="start">
+       <property name="text">
+        <string>Démarrer</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>230</y>
+      <width>102</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLineEdit" name="tourCouleur">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="terminer">
+       <property name="text">
+        <string>Terminer</string>
        </property>
       </widget>
      </item>

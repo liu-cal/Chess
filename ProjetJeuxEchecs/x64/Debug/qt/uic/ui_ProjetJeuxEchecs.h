@@ -101,6 +101,11 @@ public:
     QLineEdit *position;
     QPushButton *ajouter;
     QPushButton *enlever;
+    QPushButton *start;
+    QWidget *verticalLayoutWidget_2;
+    QVBoxLayout *verticalLayout_2;
+    QLineEdit *tourCouleur;
+    QPushButton *terminer;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -874,7 +879,7 @@ public:
 
         verticalLayoutWidget = new QWidget(centralWidget);
         verticalLayoutWidget->setObjectName("verticalLayoutWidget");
-        verticalLayoutWidget->setGeometry(QRect(470, 190, 101, 121));
+        verticalLayoutWidget->setGeometry(QRect(470, 180, 101, 161));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
@@ -913,6 +918,31 @@ public:
         enlever->setObjectName("enlever");
 
         verticalLayout->addWidget(enlever);
+
+        start = new QPushButton(verticalLayoutWidget);
+        start->setObjectName("start");
+
+        verticalLayout->addWidget(start);
+
+        verticalLayoutWidget_2 = new QWidget(centralWidget);
+        verticalLayoutWidget_2->setObjectName("verticalLayoutWidget_2");
+        verticalLayoutWidget_2->setGeometry(QRect(470, 230, 102, 51));
+        verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
+        tourCouleur = new QLineEdit(verticalLayoutWidget_2);
+        tourCouleur->setObjectName("tourCouleur");
+        tourCouleur->setEnabled(false);
+        tourCouleur->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
+        verticalLayout_2->addWidget(tourCouleur);
+
+        terminer = new QPushButton(verticalLayoutWidget_2);
+        terminer->setObjectName("terminer");
+
+        verticalLayout_2->addWidget(terminer);
 
         ProjetJeuxEchecsClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(ProjetJeuxEchecsClass);
@@ -1010,6 +1040,8 @@ public:
 
         ajouter->setText(QCoreApplication::translate("ProjetJeuxEchecsClass", "ajouter", nullptr));
         enlever->setText(QCoreApplication::translate("ProjetJeuxEchecsClass", "enlever", nullptr));
+        start->setText(QCoreApplication::translate("ProjetJeuxEchecsClass", "D\303\251marrer", nullptr));
+        terminer->setText(QCoreApplication::translate("ProjetJeuxEchecsClass", "Terminer", nullptr));
     } // retranslateUi
 
 };

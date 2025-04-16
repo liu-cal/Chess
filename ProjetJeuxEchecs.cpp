@@ -11,8 +11,6 @@ ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget* parent)
 {
 	ui->setupUi(this);
 	initialiserEchiquier();
-	connect(ui->ajouter, &QPushButton::clicked, this, &ProjetJeuxEchecs::on_ajouter_clicked);
-
 }
 
 ProjetJeuxEchecs::~ProjetJeuxEchecs()
@@ -22,6 +20,7 @@ ProjetJeuxEchecs::~ProjetJeuxEchecs()
 
 void ProjetJeuxEchecs::initialiserEchiquier() {
 	cases_.clear();
+	tourBlanc_ = true;
 
 	vector<string> colonnes = { "A", "B", "C", "D", "E", "F", "G", "H" };
 
@@ -42,6 +41,16 @@ void ProjetJeuxEchecs::initialiserEchiquier() {
 			}
 		}
 	}
+
+	connect(ui->ajouter, &QPushButton::clicked, this, &ProjetJeuxEchecs::on_ajouter_clicked);
+	connect(ui->enlever, &QPushButton::clicked, this, &ProjetJeuxEchecs::on_enlever_clicked);
+	connect(ui->start, &QPushButton::clicked, this, &ProjetJeuxEchecs::on_start_clicked);
+	connect(ui->terminer, &QPushButton::clicked, this, &ProjetJeuxEchecs::on_terminer_clicked);
+
+	mettreAJourStylesHover();
+
+	ui->terminer->setVisible(false);
+	ui->tourCouleur->setVisible(false);
 }
 
 void ProjetJeuxEchecs::on_ajouter_clicked() {
@@ -62,6 +71,10 @@ void ProjetJeuxEchecs::on_ajouter_clicked() {
 	QPushButton* caseBouton = findChild<QPushButton*>(position);
 	if (!caseBouton) {
 		qWarning() << "Bouton non trouvé pour la position:" << position;
+		return;
+	}
+	if (caseBouton->text() != "") {
+		QMessageBox::warning(this, "Erreur", "Il y a déjà une pièce sur cette case de l'échiquier. Veuiller enlevez la pièce si vous souhaitez la remplacer");
 		return;
 	}
 
@@ -87,8 +100,75 @@ void ProjetJeuxEchecs::on_ajouter_clicked() {
 		pieceLabel += (couleur == "Blanc") ? "B" : "N";
 		caseBouton->setText(pieceLabel);
 
-		// Optional: store piece in a map or vector if you want to manage it later
-		pieces_.push_back(std::move(piece)); // for example
+		// Optional: store piece in a map if you want to manage it later
+		pieces_[position] = std::move(piece);
 	}
+}
+
+void ProjetJeuxEchecs::on_enlever_clicked() {
+	QString position = ui->position->text();    // e.g., "F8"
+
+	auto it = pieces_.find(position);
+	if (it != pieces_.end()) {
+		pieces_.erase(it);              // Enlève la pièce de la map
+
+		// Met à jour l'interface : effacer le texte du bouton
+		QPushButton* bouton = findChild<QPushButton*>(position);
+		if (bouton) {
+			bouton->setText("");
+		}
+	}
+	else {
+		qWarning() << "Aucune pièce trouvée à la position" << position;
+	}
+}
+
+void ProjetJeuxEchecs::mettreAJourStylesHover() {
+	QString hoverStyle;
+
+	if (!tourBlanc_) {
+		hoverStyle = "QPushButton:hover { background-color: lightgreen; }";
+	}
+	else {
+		hoverStyle = "QPushButton:hover { background-color: lightcoral; }";
+	}
+
+	for (QPushButton* bouton : cases_) {
+		QString originalStyle = bouton->styleSheet();
+
+		// Remove any previous hover override to avoid stacking them
+		QRegularExpression regex("QPushButton:hover\\s*\\{[^}]*\\}");
+		originalStyle.remove(regex);
+
+		// Append the new hover style
+		QString updatedStyle = originalStyle.trimmed();
+
+		updatedStyle += hoverStyle;
+
+		bouton->setStyleSheet(updatedStyle);
+	}
+}
+
+void ProjetJeuxEchecs::on_start_clicked() {
+	ui->terminer->setVisible(true);
+	ui->tourCouleur->setVisible(true);
+	ui->tourCouleur->setText(tourBlanc_ ? "Tour Blanc" : "Tour Noir");
+	ui->piece->setVisible(false);
+	ui->couleur->setVisible(false);
+	ui->position->setVisible(false);
+	ui->ajouter->setVisible(false);
+	ui->enlever->setVisible(false);
+	ui->start->setVisible(false);
+}
+
+void ProjetJeuxEchecs::on_terminer_clicked() {
+	ui->terminer->setVisible(false);
+	ui->tourCouleur->setVisible(false);
+	ui->piece->setVisible(true);
+	ui->couleur->setVisible(true);
+	ui->position->setVisible(true);
+	ui->ajouter->setVisible(true);
+	ui->enlever->setVisible(true);
+	ui->start->setVisible(true);
 }
 
