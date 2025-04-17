@@ -1,0 +1,78 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "ProjetTest",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ProjetTest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ProjetTest-Debug-2e8160d45ea3cc82db8d.json",
+					"name" : "ProjetTest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ProjetTest_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ProjetTest_autogen-Debug-b1a4a59185f7fb05d905.json",
+					"name" : "ProjetTest_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ProjetTest_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ProjetTest_autogen_timestamp_deps-Debug-cdeec3598a8e019a53b2.json",
+					"name" : "ProjetTest_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/caleb/Documents/INF1015/TD6_2381534_2382761_groupe2/build/Desktop_Qt_6_9_0_MSVC2022_64bit-Debug",
+		"source" : "C:/Users/caleb/Documents/INF1015/TD6_2381534_2382761_groupe2"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

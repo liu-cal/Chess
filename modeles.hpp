@@ -28,7 +28,7 @@ namespace Modeles {
 	public:
 		Roi(int x, int y, Couleur couleur) : Piece(x, y, couleur) { ++nbPieces_; };
 		void deplacer(int x, int y) override {
-			if ((abs(x_ - x) <= 1) && (abs(y_ - y) <= 1) && x >= 0 && x < 8 && y >= 0 && y < 8) {
+			if ((abs(x_ - x) <= 1) && (abs(y_ - y) <= 1) && x >= 1 && x < 9 && y >= 1 && y < 9) {
 				x_ = x;
 				y_ = y;
 			}
@@ -48,7 +48,7 @@ namespace Modeles {
 			--nbPieces_;
 		}
 
-		static int nbPieces_;
+		inline static int nbPieces_ = 0;
 	};
 
 	class Pion : public Piece {
@@ -56,11 +56,11 @@ namespace Modeles {
 		Pion(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
 
 		void deplacer(int x, int y) override {
-			if (couleur_ == blanc && x == x_ && y == y_ + 1 && y < 8) {
+			if (couleur_ == blanc && x == x_ && y == y_ + 1 && y < 9) {
 				x_ = x;
 				y_ = y;
 			}
-			else if (couleur_ == noir && x == x_ && y == y_ - 1 && y >= 0) {
+			else if (couleur_ == noir && x == x_ && y == y_ - 1 && y >= 1) {
 				x_ = x;
 				y_ = y;
 			}
@@ -86,7 +86,7 @@ namespace Modeles {
 		Fou(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
 
 		void deplacer(int x, int y) override {
-			if (abs(x - x_) == abs(y - y_) && x >= 0 && x < 8 && y >= 0 && y < 8) {
+			if (abs(x - x_) == abs(y - y_) && x >= 1 && x < 9 && y >= 1 && y < 9) {
 				x_ = x;
 				y_ = y;
 			}
@@ -108,7 +108,7 @@ namespace Modeles {
 		Tour(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
 
 		void deplacer(int x, int y) override {
-			if ((x == x_ || y == y_) && x >= 0 && x < 8 && y >= 0 && y < 8) {
+			if ((x == x_ || y == y_) && x >= 1 && x < 9 && y >= 1 && y < 9) {
 				x_ = x;
 				y_ = y;
 			}
@@ -132,7 +132,7 @@ namespace Modeles {
 		void deplacer(int x, int y) override {
 			if (((abs(x - x_) == 2 && abs(y - y_) == 1) ||
 				(abs(x - x_) == 1 && abs(y - y_) == 2)) &&
-				x >= 0 && x < 8 && y >= 0 && y < 8) {
+				x >= 1 && x < 9 && y >= 1 && y < 9) {
 				x_ = x;
 				y_ = y;
 			}
@@ -157,7 +157,7 @@ namespace Modeles {
 
 		void deplacer(int x, int y) override {
 			if ((x == x_ || y == y_ || abs(x - x_) == abs(y - y_)) &&
-				x >= 0 && x < 8 && y >= 0 && y < 8) {
+				x >= 1 && x < 9 && y >= 1 && y < 9) {
 				x_ = x;
 				y_ = y;
 			}

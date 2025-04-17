@@ -21,6 +21,8 @@ set(BILIOTHEQUE_COURS
 file(GLOB ALL_FILES
 	*.cpp
 	*.hpp
+	*.h
+	*.ui
 	${BILIOTHEQUE_COURS}
 )
 

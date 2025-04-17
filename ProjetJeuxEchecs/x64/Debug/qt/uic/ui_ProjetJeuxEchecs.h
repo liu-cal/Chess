@@ -1035,9 +1035,9 @@ public:
         A6->setText(QString());
         F3->setText(QString());
         piece->setItemText(0, QCoreApplication::translate("ProjetJeuxEchecsClass", "Roi", nullptr));
-        piece->setItemText(1, QCoreApplication::translate("ProjetJeuxEchecsClass", "Dame", nullptr));
+        piece->setItemText(1, QCoreApplication::translate("ProjetJeuxEchecsClass", "Reine", nullptr));
         piece->setItemText(2, QCoreApplication::translate("ProjetJeuxEchecsClass", "Fou", nullptr));
-        piece->setItemText(3, QCoreApplication::translate("ProjetJeuxEchecsClass", "Chevalier", nullptr));
+        piece->setItemText(3, QCoreApplication::translate("ProjetJeuxEchecsClass", "Cavalier", nullptr));
         piece->setItemText(4, QCoreApplication::translate("ProjetJeuxEchecsClass", "Tour", nullptr));
         piece->setItemText(5, QCoreApplication::translate("ProjetJeuxEchecsClass", "Pion", nullptr));
 

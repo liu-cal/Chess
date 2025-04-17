@@ -1,6 +1,9 @@
 ﻿   Qt/MSBuild: 3.3.1.1
    Qt: 6.9.0
   ProjetJeuxEchecs.cpp
-C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\ProjetJeuxEchecs.cpp(199,6): warning C4189: 'fromY': local variable is initialized but not referenced
-C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\ProjetJeuxEchecs.cpp(198,6): warning C4189: 'fromX': local variable is initialized but not referenced
+  main.cpp
+  modeles.hpp
+C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\ProjetJeuxEchecs.cpp(229,6): warning C4189: 'fromY': local variable is initialized but not referenced
+C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\ProjetJeuxEchecs.cpp(228,6): warning C4189: 'fromX': local variable is initialized but not referenced
+  moc_ProjetJeuxEchecs.cpp
   ProjetJeuxEchecs.vcxproj -> C:\Users\caleb\Documents\INF1015\TD6_2381534_2382761_groupe2\x64\Debug\ProjetJeuxEchecs.exe

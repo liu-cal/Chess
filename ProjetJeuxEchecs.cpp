@@ -35,11 +35,29 @@ void ProjetJeuxEchecs::initialiserEchiquier() {
 				connect(bouton, &QPushButton::clicked, this, [this, bouton]() {
 					QString pos = bouton->objectName();
 
+					QString pieceText = bouton->text();
+					QChar lastChar;
+
+					QChar turnColor;
+
 					ui->position->setText(pos);  // Optionally show in GUI
 
 					if (isStarted_) {
 						if (sourceSelection_.isEmpty()) {
-							sourceSelection_ = pos;
+							if (!pieceText.isEmpty()) {
+
+								turnColor = ui->tourCouleur->text().split(' ').last().at(0);
+								lastChar = pieceText.at(pieceText.length() - 1);
+
+								// Check if piece color matches current turn
+								//if (lastChar == turnColor) {
+								sourceSelection_ = pos;
+								/*}
+								else {
+									QMessageBox::warning(this, "Mauvais tour",
+										"Ce n'est pas votre tour de jouer !");
+								}*/
+							}
 						}
 						else {
 							destinationSelection_ = pos;
@@ -101,6 +119,7 @@ void ProjetJeuxEchecs::on_ajouter_clicked() {
 	int y = position[1].digitValue();
 
 	unique_ptr<Modeles::Piece> piece = nullptr;
+
 	if (typePiece == "Roi") {
 		piece = make_unique<Modeles::Roi>(x, y, couleurEnum);
 	}
@@ -109,6 +128,15 @@ void ProjetJeuxEchecs::on_ajouter_clicked() {
 	}
 	else if (typePiece == "Fou") {
 		piece = make_unique<Modeles::Fou>(x, y, couleurEnum);
+	}
+	else if (typePiece == "Reine") {
+		piece = make_unique<Modeles::Reine>(x, y, couleurEnum);
+	}
+	else if (typePiece == "Cavalier") {
+		piece = make_unique<Modeles::Cavalier>(x, y, couleurEnum);
+	}
+	else if (typePiece == "Tour") {
+		piece = make_unique<Modeles::Tour>(x, y, couleurEnum);
 	}
 
 	if (piece) {
@@ -194,11 +222,13 @@ void ProjetJeuxEchecs::on_terminer_clicked() {
 }
 
 void ProjetJeuxEchecs::deplacerPiece(const QString& from, const QString& to) {
+
+
 	// Convert positions to coordinates
-	int fromX = from[0].toUpper().unicode() - 'A';
-	int fromY = from[1].digitValue() - 1;
-	int toX = to[0].toUpper().unicode() - 'A';
-	int toY = to[1].digitValue() - 1;
+	int fromX = from[0].toUpper().unicode() - 'A' + 1;
+	int fromY = from[1].digitValue();
+	int toX = to[0].toUpper().unicode() - 'A' + 1;
+	int toY = to[1].digitValue();
 
 	// Check if source position has a piece
 	auto it = pieces_.find(from);
