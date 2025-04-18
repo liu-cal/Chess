@@ -40,4 +40,5 @@ private:
 	void on_start_clicked();
 	void on_terminer_clicked();
 	void deplacerPiece(const QString& from, const QString& to);
+	bool roiEnEchecApresDeplacement(const QString& from, const QString& to);
 };

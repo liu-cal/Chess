@@ -237,6 +237,11 @@ void ProjetJeuxEchecs::deplacerPiece(const QString& from, const QString& to) {
 		return;
 	}
 
+	if (roiEnEchecApresDeplacement(from, to)) {
+		QMessageBox::warning(this, "Échec", "Ce déplacement mettrait votre roi en échec.");
+		return;
+	}
+
 	// Get the piece
 	std::unique_ptr<Modeles::Piece>& piece = it->second;
 
@@ -303,3 +308,56 @@ void ProjetJeuxEchecs::deplacerPiece(const QString& from, const QString& to) {
 	ui->tourCouleur->setText(tourBlanc_ ? "Tour Blanc" : "Tour Noir");
 }
 
+bool ProjetJeuxEchecs::roiEnEchecApresDeplacement(const QString& from, const QString& to) {
+	// Copier les pièces temporairement
+	std::unordered_map<QString, std::unique_ptr<Modeles::Piece>> piecesBackup;
+	for (const auto& it : pieces_) {
+		piecesBackup[it.first] = std::unique_ptr<Modeles::Piece>(it.second->clone()); // Assure-toi que clone() existe
+	}
+
+	// Simuler le déplacement
+	auto it = piecesBackup.find(from);
+	if (it == piecesBackup.end()) return false;
+
+	std::unique_ptr<Modeles::Piece> tempPiece = std::move(it->second);
+	piecesBackup.erase(it);
+
+	if (piecesBackup.contains(to)) {
+		piecesBackup.erase(to);  // Simule la capture
+	}
+
+	tempPiece->x_ = to[0].toUpper().unicode() - 'A' + 1;
+	tempPiece->y_ = to[1].digitValue();
+	piecesBackup[to] = std::move(tempPiece);
+
+	// Chercher le roi de la couleur de la pièce déplacée
+	Modeles::Couleur couleur = piecesBackup[to]->couleur_;
+	int roiX = -1, roiY = -1;
+	for (const auto& pair : piecesBackup) {
+		if (auto* roi = dynamic_cast<Modeles::Roi*>(pair.second.get())) {
+			if (roi->couleur_ == couleur) {
+				roiX = roi->x_;
+				roiY = roi->y_;
+				break;
+			}
+		}
+	}
+
+	// Si le roi n'est pas trouvé (ce qui ne devrait jamais arriver)
+	if (roiX == -1 || roiY == -1) return true;
+
+	// Vérifie si une pièce ennemie peut capturer le roi
+	for (const auto& pair : piecesBackup) {
+		if (pair.second->couleur_ != couleur) {
+			try {
+				Modeles::DeplacementTemporaire temp(*pair.second, roiX, roiY);
+				return true; // Une pièce ennemie peut atteindre le roi
+			}
+			catch (...) {
+				// Ne peut pas atteindre, on continue
+			}
+		}
+	}
+
+	return false;
+}

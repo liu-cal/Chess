@@ -2,6 +2,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <memory>
 
 using namespace std;
 
@@ -17,6 +18,8 @@ namespace Modeles {
 		virtual void deplacer(int x, int y) = 0;
 
 		virtual void manger(const Piece& piece) = 0;
+
+		virtual unique_ptr<Piece> clone() const = 0;
 
 		virtual ~Piece() = default;
 
@@ -44,6 +47,8 @@ namespace Modeles {
 			}
 		}
 
+		unique_ptr<Piece> clone() const override { return make_unique<Roi>(*this); }
+
 		~Roi() {
 			--nbPieces_;
 		}
@@ -65,7 +70,7 @@ namespace Modeles {
 				y_ = y;
 			}
 			else {
-				throw std::invalid_argument("Mouvement invalide pour un roi");
+				throw std::invalid_argument("Mouvement invalide pour un pion");
 			}
 		};
 
@@ -79,6 +84,8 @@ namespace Modeles {
 				this->y_ = piece.y_;
 			}
 		}
+
+		unique_ptr<Piece> clone() const override { return make_unique<Pion>(*this); }
 	};
 
 	class Fou : public Piece {
@@ -101,6 +108,8 @@ namespace Modeles {
 				this->y_ = piece.y_;
 			}
 		}
+
+		unique_ptr<Piece> clone() const override { return make_unique<Fou>(*this); }
 	};
 
 	class Tour : public Piece {
@@ -113,7 +122,7 @@ namespace Modeles {
 				y_ = y;
 			}
 			else {
-				throw std::invalid_argument("Mouvement invalide pour un roi");
+				throw std::invalid_argument("Mouvement invalide pour une tour");
 			}
 		};
 
@@ -123,6 +132,8 @@ namespace Modeles {
 				this->y_ = piece.y_;
 			}
 		}
+
+		unique_ptr<Piece> clone() const override { return make_unique<Tour>(*this); }
 	};
 
 	class Cavalier : public Piece {
@@ -137,7 +148,7 @@ namespace Modeles {
 				y_ = y;
 			}
 			else {
-				throw std::invalid_argument("Mouvement invalide pour un roi");
+				throw std::invalid_argument("Mouvement invalide pour un cavalier");
 			}
 		};
 
@@ -149,6 +160,8 @@ namespace Modeles {
 				this->y_ = piece.y_;
 			}
 		}
+
+		unique_ptr<Piece> clone() const override { return make_unique<Cavalier>(*this); }
 	};
 
 	class Reine : public Piece {
@@ -162,7 +175,7 @@ namespace Modeles {
 				y_ = y;
 			}
 			else {
-				throw std::invalid_argument("Mouvement invalide pour un roi");
+				throw std::invalid_argument("Mouvement invalide pour une reine");
 			}
 		};
 
@@ -173,6 +186,8 @@ namespace Modeles {
 				this->y_ = piece.y_;
 			}
 		}
+
+		unique_ptr<Piece> clone() const override { return make_unique<Reine>(*this); }
 	};
 
 	class DeplacementTemporaire {
