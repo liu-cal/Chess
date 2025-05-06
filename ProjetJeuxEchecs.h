@@ -1,10 +1,11 @@
-﻿#pragma once
+#pragma once
 
 #include <QtWidgets/QMainWindow>
 #include "ui_ProjetJeuxEchecs.h"
-#include <vector>        
+#include <vector>
 #include <QPushButton>
 #include "modeles.hpp"
+#include "chess_Board.h"
 
 using namespace std;
 
@@ -14,31 +15,30 @@ QT_END_NAMESPACE
 
 class ProjetJeuxEchecs : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	ProjetJeuxEchecs(QWidget* parent = nullptr);
-	~ProjetJeuxEchecs();
+    ProjetJeuxEchecs(QWidget* parent = nullptr);
+    ~ProjetJeuxEchecs();
 
 private:
-	Ui::ProjetJeuxEchecsClass* ui;
+    Ui::ProjetJeuxEchecsClass* ui;
+    vector<QPushButton*> cases_;
 
-	vector<QPushButton*> cases_;
-	unordered_map<QString, unique_ptr<Modeles::Piece>> pieces_;
+    Modeles::ChessBoard echiquier_; // Remplace la map de pièces
 
-	bool tourBlanc_;
-	bool isStarted_ = false;
+    bool tourBlanc_;
+    bool isStarted_ = false;
 
-	QString sourceSelection_;  // First clicked position
-	QString destinationSelection_;  // Second clicked position
+    QString sourceSelection_;
+    QString destinationSelection_;
 
-	void initialiserEchiquier();
-	void on_ajouter_clicked();
-	bool hasTwoDifferentColorPieces(const QString& pieceType) const;
-	void on_enlever_clicked();
-	void mettreAJourStylesHover();
-	void on_start_clicked();
-	void on_terminer_clicked();
-	void deplacerPiece(const QString& from, const QString& to);
-	bool roiEnEchecApresDeplacement(const QString& from, const QString& to);
+    void initialiserEchiquier();
+    void on_ajouter_clicked();
+    void on_enlever_clicked();
+    void mettreAJourStylesHover();
+    void on_start_clicked();
+    void on_terminer_clicked();
+    void deplacerPiece(const QString& from, const QString& to);
+    bool roiEnEchecApresDeplacement(const QString& from, const QString& to);
 };
