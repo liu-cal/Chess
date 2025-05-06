@@ -7,208 +7,214 @@
 using namespace std;
 
 namespace Modeles {
-	enum Couleur {
-		blanc, noir
-	};
+enum Couleur {
+    blanc, noir
+};
 
-	class Piece {
-	public:
-		Piece(int x, int y, Couleur couleur) : x_(x), y_(y), couleur_(couleur) {};
+class Piece {
+public:
+    Piece(int colonne, int rangee, Couleur couleur)
+        : colonne_(colonne), rangee_(rangee), couleur_(couleur) {};
 
-		virtual void deplacer(int x, int y) = 0;
+    virtual void deplacer(int colonne, int rangee) = 0;
+    virtual void manger(const Piece& piece) = 0;
+    virtual unique_ptr<Piece> clone() const = 0;
+    virtual ~Piece() = default;
 
-		virtual void manger(const Piece& piece) = 0;
+    int colonne_, rangee_;
+    Couleur couleur_;
+};
 
-		virtual unique_ptr<Piece> clone() const = 0;
+class Roi : public Piece {
+public:
+    Roi(int colonne, int rangee, Couleur couleur) : Piece(colonne, rangee, couleur) { ++nbPieces_; };
 
-		virtual ~Piece() = default;
+    void deplacer(int colonne, int rangee) override {
+        if ((abs(colonne_ - colonne) <= 1) && (abs(rangee_ - rangee) <= 1) &&
+            colonne >= 1 && colonne < 9 && rangee >= 1 && rangee < 9) {
+            colonne_ = colonne;
+            rangee_ = rangee;
+        }
+        else {
+            throw std::invalid_argument("Mouvement invalide pour un roi");
+        }
+    }
 
-		int x_, y_;
-		Couleur couleur_;
-	};
+    void manger(const Piece& piece) override {
+        if (piece.couleur_ != this->couleur_) {
+            this->colonne_ = piece.colonne_;
+            this->rangee_ = piece.rangee_;
+        }
+    }
 
-	class Roi : public Piece {
-	public:
-		Roi(int x, int y, Couleur couleur) : Piece(x, y, couleur) { ++nbPieces_; };
-		void deplacer(int x, int y) override {
-			if ((abs(x_ - x) <= 1) && (abs(y_ - y) <= 1) && x >= 1 && x < 9 && y >= 1 && y < 9) {
-				x_ = x;
-				y_ = y;
-			}
-			else {
-				throw std::invalid_argument("Mouvement invalide pour un roi");
-			}
-		}
+    unique_ptr<Piece> clone() const override { return make_unique<Roi>(*this); }
 
-		void manger(const Piece& piece) override {
-			if (piece.couleur_ != this->couleur_) {
-				this->x_ = piece.x_;
-				this->y_ = piece.y_;
-			}
-		}
+    ~Roi() {
+        --nbPieces_;
+    }
 
-		unique_ptr<Piece> clone() const override { return make_unique<Roi>(*this); }
+    static int nbPieces_;
+};
 
-		~Roi() {
-			--nbPieces_;
-		}
+class Pion : public Piece {
+public:
+    Pion(int colonne, int rangee, Couleur couleur) : Piece(colonne, rangee, couleur) {};
 
-		inline static int nbPieces_ = 0;
-	};
+    void deplacer(int colonne, int rangee) override {
+        if (couleur_ == blanc && colonne == colonne_ && rangee == rangee_ + 1 && rangee < 9) {
+            colonne_ = colonne;
+            rangee_ = rangee;
+        }
+        else if (couleur_ == noir && colonne == colonne_ && rangee == rangee_ - 1 && rangee >= 1) {
+            colonne_ = colonne;
+            rangee_ = rangee;
+        }
+        else {
+            throw std::invalid_argument("Mouvement invalide pour un pion");
+        }
+    };
 
-	class Pion : public Piece {
-	public:
-		Pion(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
+    void manger(const Piece& piece) override {
+        if (couleur_ == blanc && piece.couleur_ != couleur_ &&
+            abs(colonne_ - piece.colonne_) == 1 && rangee_ + 1 == piece.rangee_) {
+            this->colonne_ = piece.colonne_;
+            this->rangee_ = piece.rangee_;
+        }
+        else if (couleur_ == noir && piece.couleur_ != couleur_ &&
+                 abs(colonne_ - piece.colonne_) == 1 && rangee_ - 1 == piece.rangee_) {
+            this->colonne_ = piece.colonne_;
+            this->rangee_ = piece.rangee_;
+        }
+    }
 
-		void deplacer(int x, int y) override {
-			if (couleur_ == blanc && x == x_ && y == y_ + 1 && y < 9) {
-				x_ = x;
-				y_ = y;
-			}
-			else if (couleur_ == noir && x == x_ && y == y_ - 1 && y >= 1) {
-				x_ = x;
-				y_ = y;
-			}
-			else {
-				throw std::invalid_argument("Mouvement invalide pour un pion");
-			}
-		};
+    unique_ptr<Piece> clone() const override { return make_unique<Pion>(*this); }
+};
 
-		void manger(const Piece& piece) override {
-			if (couleur_ == blanc && piece.couleur_ != couleur_ && abs(x_ - piece.x_) == 1 && y_ + 1 == piece.y_) {
-				this->x_ = piece.x_;
-				this->y_ = piece.y_;
-			}
-			else if (couleur_ == noir && piece.couleur_ != couleur_ && abs(x_ - piece.x_) == 1 && y_ - 1 == piece.y_) {
-				this->x_ = piece.x_;
-				this->y_ = piece.y_;
-			}
-		}
+class Fou : public Piece {
+public:
+    Fou(int colonne, int rangee, Couleur couleur) : Piece(colonne, rangee, couleur) {};
 
-		unique_ptr<Piece> clone() const override { return make_unique<Pion>(*this); }
-	};
+    void deplacer(int colonne, int rangee) override {
+        if (abs(colonne - colonne_) == abs(rangee - rangee_) &&
+            colonne >= 1 && colonne < 9 && rangee >= 1 && rangee < 9) {
+            colonne_ = colonne;
+            rangee_ = rangee;
+        }
+        else {
+            throw std::invalid_argument("Mouvement invalide pour un fou");
+        }
+    };
 
-	class Fou : public Piece {
-	public:
-		Fou(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
+    void manger(const Piece& piece) override {
+        if (piece.couleur_ != this->couleur_ &&
+            abs(colonne_ - piece.colonne_) == abs(rangee_ - piece.rangee_)) {
+            this->colonne_ = piece.colonne_;
+            this->rangee_ = piece.rangee_;
+        }
+    }
 
-		void deplacer(int x, int y) override {
-			if (abs(x - x_) == abs(y - y_) && x >= 1 && x < 9 && y >= 1 && y < 9) {
-				x_ = x;
-				y_ = y;
-			}
-			else {
-				throw std::invalid_argument("Mouvement invalide pour un fou");
-			}
-		};
+    unique_ptr<Piece> clone() const override { return make_unique<Fou>(*this); }
+};
 
-		void manger(const Piece& piece) override {
-			if (piece.couleur_ != this->couleur_ && abs(x_ - piece.x_) == abs(y_ - piece.y_)) {
-				this->x_ = piece.x_;
-				this->y_ = piece.y_;
-			}
-		}
+class Tour : public Piece {
+public:
+    Tour(int colonne, int rangee, Couleur couleur) : Piece(colonne, rangee, couleur) {};
 
-		unique_ptr<Piece> clone() const override { return make_unique<Fou>(*this); }
-	};
+    void deplacer(int colonne, int rangee) override {
+        if ((colonne == colonne_ || rangee == rangee_) &&
+            colonne >= 1 && colonne < 9 && rangee >= 1 && rangee < 9) {
+            colonne_ = colonne;
+            rangee_ = rangee;
+        }
+        else {
+            throw std::invalid_argument("Mouvement invalide pour une tour");
+        }
+    };
 
-	class Tour : public Piece {
-	public:
-		Tour(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
+    void manger(const Piece& piece) override {
+        if (piece.couleur_ != this->couleur_ &&
+            (colonne_ == piece.colonne_ || rangee_ == piece.rangee_)) {
+            this->colonne_ = piece.colonne_;
+            this->rangee_ = piece.rangee_;
+        }
+    }
 
-		void deplacer(int x, int y) override {
-			if ((x == x_ || y == y_) && x >= 1 && x < 9 && y >= 1 && y < 9) {
-				x_ = x;
-				y_ = y;
-			}
-			else {
-				throw std::invalid_argument("Mouvement invalide pour une tour");
-			}
-		};
+    unique_ptr<Piece> clone() const override { return make_unique<Tour>(*this); }
+};
 
-		void manger(const Piece& piece) override {
-			if (piece.couleur_ != this->couleur_ && (x_ == piece.x_ || y_ == piece.y_)) {
-				this->x_ = piece.x_;
-				this->y_ = piece.y_;
-			}
-		}
+class Cavalier : public Piece {
+public:
+    Cavalier(int colonne, int rangee, Couleur couleur) : Piece(colonne, rangee, couleur) {};
 
-		unique_ptr<Piece> clone() const override { return make_unique<Tour>(*this); }
-	};
+    void deplacer(int colonne, int rangee) override {
+        if (((abs(colonne - colonne_) == 2 && abs(rangee - rangee_) == 1) ||
+             (abs(colonne - colonne_) == 1 && abs(rangee - rangee_) == 2)) &&
+            colonne >= 1 && colonne < 9 && rangee >= 1 && rangee < 9) {
+            colonne_ = colonne;
+            rangee_ = rangee;
+        }
+        else {
+            throw std::invalid_argument("Mouvement invalide pour un cavalier");
+        }
+    };
 
-	class Cavalier : public Piece {
-	public:
-		Cavalier(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
+    void manger(const Piece& piece) override {
+        if (piece.couleur_ != this->couleur_ &&
+            ((abs(colonne_ - piece.colonne_) == 2 && abs(rangee_ - piece.rangee_) == 1) ||
+             (abs(colonne_ - piece.colonne_) == 1 && abs(rangee_ - piece.rangee_) == 2))) {
+            this->colonne_ = piece.colonne_;
+            this->rangee_ = piece.rangee_;
+        }
+    }
 
-		void deplacer(int x, int y) override {
-			if (((abs(x - x_) == 2 && abs(y - y_) == 1) ||
-				(abs(x - x_) == 1 && abs(y - y_) == 2)) &&
-				x >= 1 && x < 9 && y >= 1 && y < 9) {
-				x_ = x;
-				y_ = y;
-			}
-			else {
-				throw std::invalid_argument("Mouvement invalide pour un cavalier");
-			}
-		};
+    unique_ptr<Piece> clone() const override { return make_unique<Cavalier>(*this); }
+};
 
-		void manger(const Piece& piece) override {
-			if (piece.couleur_ != this->couleur_ &&
-				((abs(x_ - piece.x_) == 2 && abs(y_ - piece.y_) == 1) ||
-					(abs(x_ - piece.x_) == 1 && abs(y_ - piece.y_) == 2))) {
-				this->x_ = piece.x_;
-				this->y_ = piece.y_;
-			}
-		}
+class Reine : public Piece {
+public:
+    Reine(int colonne, int rangee, Couleur couleur) : Piece(colonne, rangee, couleur) {};
 
-		unique_ptr<Piece> clone() const override { return make_unique<Cavalier>(*this); }
-	};
+    void deplacer(int colonne, int rangee) override {
+        if ((colonne == colonne_ || rangee == rangee_ || abs(colonne - colonne_) == abs(rangee - rangee_)) &&
+            colonne >= 1 && colonne < 9 && rangee >= 1 && rangee < 9) {
+            colonne_ = colonne;
+            rangee_ = rangee;
+        }
+        else {
+            throw std::invalid_argument("Mouvement invalide pour une reine");
+        }
+    };
 
-	class Reine : public Piece {
-	public:
-		Reine(int x, int y, Couleur couleur) : Piece(x, y, couleur) {};
+    void manger(const Piece& piece) override {
+        if (piece.couleur_ != this->couleur_ &&
+            (colonne_ == piece.colonne_ || rangee_ == piece.rangee_ || abs(colonne_ - piece.colonne_) == abs(rangee_ - piece.rangee_))) {
+            this->colonne_ = piece.colonne_;
+            this->rangee_ = piece.rangee_;
+        }
+    }
 
-		void deplacer(int x, int y) override {
-			if ((x == x_ || y == y_ || abs(x - x_) == abs(y - y_)) &&
-				x >= 1 && x < 9 && y >= 1 && y < 9) {
-				x_ = x;
-				y_ = y;
-			}
-			else {
-				throw std::invalid_argument("Mouvement invalide pour une reine");
-			}
-		};
+    unique_ptr<Piece> clone() const override { return make_unique<Reine>(*this); }
+};
 
-		void manger(const Piece& piece) override {
-			if (piece.couleur_ != this->couleur_ &&
-				(x_ == piece.x_ || y_ == piece.y_ || abs(x_ - piece.x_) == abs(y_ - piece.y_))) {
-				this->x_ = piece.x_;
-				this->y_ = piece.y_;
-			}
-		}
+class DeplacementTemporaire {
+public:
+    DeplacementTemporaire(Piece& piece, int colonneTemporaire, int rangeeTemporaire)
+        : piece_(piece), colonneOriginale_(piece.colonne_), rangeeOriginale_(piece.rangee_) {
+        try {
+            piece_.deplacer(colonneTemporaire, rangeeTemporaire);
+        }
+        catch (exception& e) {
+            throw;
+        }
+    }
 
-		unique_ptr<Piece> clone() const override { return make_unique<Reine>(*this); }
-	};
+    ~DeplacementTemporaire() {
+        piece_.colonne_ = colonneOriginale_;
+        piece_.rangee_ = rangeeOriginale_;
+    }
 
-	class DeplacementTemporaire {
-	public:
-		DeplacementTemporaire(Piece& piece, int xTemporaire, int yTemporaire)
-			: piece_(piece), xOriginal_(piece.x_), yOriginal_(piece.y_) {
-			try {
-				piece_.deplacer(xTemporaire, yTemporaire);
-			}
-			catch (exception e) {
-				throw;
-			}
-		}
-
-		~DeplacementTemporaire() {
-			piece_.x_ = xOriginal_;
-			piece_.y_ = yOriginal_;
-		}
-
-	private:
-		Piece& piece_;
-		int xOriginal_, yOriginal_;
-	};
+private:
+    Piece& piece_;
+    int colonneOriginale_, rangeeOriginale_;
+};
 }
